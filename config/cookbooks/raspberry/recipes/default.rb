@@ -2,17 +2,17 @@ directory '/usr/local/lib/systemd/system' do
     recursive true
 end
 
-cookbook_file '/etc/systemd/network/20-wifi.network' do
-    source '20-wifi.network'
-end
+#cookbook_file '/etc/systemd/network/20-wifi.network' do
+#    source '20-wifi.network'
+#end
 
-apt_package 'iw'
-apt_package 'wpasupplicant'
+#apt_package 'iw'
+#apt_package 'wpasupplicant'
 
-cookbook_file "/boot/wifi.conf" do
-    action :create_if_missing
-    source "wifi.conf"
-end
+#cookbook_file "/boot/wifi.conf" do
+#    action :create_if_missing
+#    source "wifi.conf"
+#end
 
 cookbook_file '/etc/edge-netdog.conf' do
     source 'edge-netdog.conf'
@@ -44,9 +44,9 @@ service 'edge_netdog' do
     provider Chef::Provider::Service::Systemd
 end
 
-link '/etc/wpa_supplicant/wpa_supplicant.conf' do
-    to '/boot/wifi.conf'
-end
+#link '/etc/wpa_supplicant/wpa_supplicant.conf' do
+#    to '/boot/wifi.conf'
+#end
 
 apt_package 'git'
 apt_package 'python-git'
@@ -109,45 +109,45 @@ service "update_chef" do
 end
 
 # Support for TP-Link Archer T2U AC600
-apt_package 'dkms'
+#apt_package 'dkms'
 
-execute 'Check /usr/src' do
-    command 'ls -l /usr/src'
-    live_stream true
-end
+#execute 'Check /usr/src' do
+#    command 'ls -l /usr/src'
+#    live_stream true
+#end
 
-if node['languages']['ruby']['target_cpu'] != ""
-    machine_path = "/usr/src/linux-headers-#{node['os_version']}/arch/#{node['kernel']['machine']}"
-    cpu_path = "/usr/src/linux-headers-#{node['os_version']}/arch/#{node['languages']['ruby']['target_cpu']}"
+#if node['languages']['ruby']['target_cpu'] != ""
+#    machine_path = "/usr/src/linux-headers-#{node['os_version']}/arch/#{node['kernel']['machine']}"
+#    cpu_path = "/usr/src/linux-headers-#{node['os_version']}/arch/#{node['languages']['ruby']['target_cpu']}"
 
-    unless machine_path == cpu_path
-        link machine_path do
-            to cpu_path
-        end
-    end
-end
+#    unless machine_path == cpu_path
+#        link machine_path do
+#            to cpu_path
+#        end
+#    end
+#end
 
-execute 'dkms add' do
-    command 'dkms add -m rtl8812au -v 5.6.4.2'
-    action :nothing
-end
+#execute 'dkms add' do
+#    command 'dkms add -m rtl8812au -v 5.6.4.2'
+#    action :nothing
+#end
 
-execute 'dkms build' do
-    command 'dkms build -m rtl8812au -v 5.6.4.2'
-    action :nothing
-    timeout 36000 # Build on a Raspberry Pi 1 is really slow
-end
+#execute 'dkms build' do
+#    command 'dkms build -m rtl8812au -v 5.6.4.2'
+#    action :nothing
+#    timeout 36000 # Build on a Raspberry Pi 1 is really slow
+#end
 
-execute 'dkms install' do
-    command 'dkms install -m rtl8812au -v 5.6.4.2'
-    action :nothing
-end
+#execute 'dkms install' do
+#    command 'dkms install -m rtl8812au -v 5.6.4.2'
+#    action :nothing
+#end
 
-git '/usr/src/rtl8812au-5.6.4.2' do
-    repository 'https://github.com/aircrack-ng/rtl8812au.git'
-    revision 'v5.6.4.2'
-    action :sync
-    notifies :run, 'execute[dkms add]', :immediately
-    notifies :run, 'execute[dkms build]', :immediately
-    notifies :run, 'execute[dkms install]', :immediately
-end
+#git '/usr/src/rtl8812au-5.6.4.2' do
+#    repository 'https://github.com/aircrack-ng/rtl8812au.git'
+#    revision 'v5.6.4.2'
+#    action :sync
+#    notifies :run, 'execute[dkms add]', :immediately
+#    notifies :run, 'execute[dkms build]', :immediately
+#    notifies :run, 'execute[dkms install]', :immediately
+#end
