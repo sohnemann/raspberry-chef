@@ -14,35 +14,35 @@ end
 #    source "wifi.conf"
 #end
 
-cookbook_file '/etc/edge-netdog.conf' do
-    source 'edge-netdog.conf'
-end
+#cookbook_file '/etc/edge-netdog.conf' do
+#    source 'edge-netdog.conf'
+#end
 
-netdog_platform = case node['kernel']['machine']
-when 'x86_64' then 'linux-amd64'
-when 'armv6l' then 'linux-arm6'
-when 'armv7l' then 'linux-arm7'
-else
-    Chef::Log.warn("Unsupported platform '#{node['kernel']['machine']}'")
-    ''
-end
+#netdog_platform = case node['kernel']['machine']
+#when 'x86_64' then 'linux-amd64'
+#when 'armv6l' then 'linux-arm6'
+#when 'armv7l' then 'linux-arm7'
+#else
+#    Chef::Log.warn("Unsupported platform '#{node['kernel']['machine']}'")
+#    ''
+#end
 
-remote_file '/usr/bin/edge-netdog' do
-    source "https://github.com/nmcclain/edge-netdog/releases/download/v1.0.0/edge-netdog_#{netdog_platform}"
-    mode '0755'
-end
+#remote_file '/usr/bin/edge-netdog' do
+#    source "https://github.com/nmcclain/edge-netdog/releases/download/v1.0.0/edge-netdog_#{netdog_platform}"
+#    mode '0755'
+#end
 
-cookbook_file '/usr/local/lib/systemd/system/edge_netdog.service' do
-    source 'edge_netdog.service'
-    notifies :run, 'execute[systemctl daemon-reload]', :immediately
-    notifies :restart, 'service[edge_netdog]'
-end
+#cookbook_file '/usr/local/lib/systemd/system/edge_netdog.service' do
+#    source 'edge_netdog.service'
+#    notifies :run, 'execute[systemctl daemon-reload]', :immediately
+#    notifies :restart, 'service[edge_netdog]'
+#end
 
-service 'edge_netdog' do
-    supports :status => true, :restart => true, :reload => true
-    action [ :enable, :start ]
-    provider Chef::Provider::Service::Systemd
-end
+#service 'edge_netdog' do
+#    supports :status => true, :restart => true, :reload => true
+#    action [ :enable, :start ]
+#    provider Chef::Provider::Service::Systemd
+#end
 
 #link '/etc/wpa_supplicant/wpa_supplicant.conf' do
 #    to '/boot/wifi.conf'
